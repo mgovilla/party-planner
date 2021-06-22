@@ -1,0 +1,41 @@
+scalar DateTime
+
+type User {
+  id: ID!
+  name: String!
+  email: String
+  parties: [Party] @relationship(type: "INVITED_TO", direction: OUT)
+  bringing: [Object] @relationship(type: "BROUGHT_BY", direction: IN)
+}
+
+type Party {
+  id: ID!
+  name: String!
+  location: String
+  date: DateTime
+  invitees: [User] @relationship(type: "INVITED_TO", direction: IN)
+  host: User
+}
+
+type Object {
+  id: ID!
+  name: String
+  owner: User @relationship(type: "BROUGHT_BY", direction: OUT)
+  party: Party @relationship(type: "REQUIRED_BY", direction: OUT)
+  cost: Float
+}
+
+type Mutation {
+  mergeUser(name: String!, id: ID!): User
+    @cypher(
+      statement: """
+      MERGE (u:User {id: $id})
+      ON CREATE SET u.name = $name
+      RETURN u
+      """
+    )
+}
+
+type Query {
+  userCount: Int! @cypher(statement: "MATCH (u:User) RETURN COUNT(u)")
+}
