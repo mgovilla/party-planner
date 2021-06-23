@@ -5,6 +5,7 @@ type User {
   name: String!
   email: String
   parties: [Party] @relationship(type: "INVITED_TO", direction: OUT)
+  hosting: [Party] @relationship(type: "HOSTING", direction: OUT)
   bringing: [Object] @relationship(type: "BROUGHT_BY", direction: IN)
 }
 
@@ -14,7 +15,8 @@ type Party {
   location: String
   date: DateTime
   invitees: [User] @relationship(type: "INVITED_TO", direction: IN)
-  host: User
+  host: User @relationship(type: "HOSTING", direction: IN)
+  requires: [Object] @relationship(type: "REQUIRED_BY", direction: IN)
 }
 
 type Object {

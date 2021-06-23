@@ -20,19 +20,23 @@ const client = new ApolloClient({
 
 const runMutations = async () => {
   const mutations = await getSeedMutations()
-
-  return Promise.all(
-    mutations.map(({ mutation, variables }) => {
-      return client
-        .mutate({
-          mutation,
-          variables,
-        })
-        .catch((e) => {
-          throw new Error(e)
-        })
-    })
-  )
+  // For every type, we run the mutations. This is order dependent as the parties must
+  // exist before the users can be created (and connect to them)
+  for (let set of mutations) {
+    console.log(set)
+    await Promise.all(
+      set.map(({ mutation, variables }) => {
+        return client
+          .mutate({
+            mutation,
+            variables,
+          })
+          .catch((e) => {
+            throw new Error(e)
+          })
+      })
+    )
+  }
 }
 
 runMutations()
