@@ -36,7 +36,7 @@ function Copyright() {
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
       <MUILink color="inherit" href="https://grandstack.io/">
-        Your GRANDstack App Name Here
+        Party Planner
       </MUILink>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -203,12 +203,12 @@ export default function App() {
               </ListItem>
             </Link>
 
-            <Link to="/users" className={classes.navLink}>
+            <Link to="/friends" className={classes.navLink}>
               <ListItem button>
                 <ListItemIcon>
                   <PeopleIcon />
                 </ListItemIcon>
-                <ListItemText primary="Users" />
+                <ListItemText primary="Friends" />
               </ListItem>
             </Link>
           </List>
@@ -220,7 +220,7 @@ export default function App() {
             <Switch>
               <Route exact path="/" component={Dashboard} />
               <Route exact path="/businesses" component={UserList} />
-              <Route exact path="/users" component={UserList} />
+              <Route exact path="/friends" component={UserList} />
             </Switch>
 
             <Box pt={4}>

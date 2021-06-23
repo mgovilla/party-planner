@@ -40,4 +40,12 @@ type Mutation {
 
 type Query {
   userCount: Int! @cypher(statement: "MATCH (u:User) RETURN COUNT(u)")
+  myParties(id: ID!): [Party] @cypher(statement: """
+  MATCH (p:Party)<-[:HOSTING]-(:User {id: $id})
+  RETURN p
+  """)
+  myInvites(id: ID!): [Party] @cypher(statement: """
+  MATCH (p:Party)<-[:INVITED_TO]-(:User {id: $id})
+  RETURN p
+  """)
 }
