@@ -8,41 +8,27 @@ import clsx from 'clsx'
 import { makeStyles } from '@material-ui/core/styles'
 import {
   CssBaseline,
-  Drawer,
-  Box,
+  // Box,
   AppBar,
   Toolbar,
-  List,
   Typography,
-  Divider,
-  IconButton,
   Container,
-  Link as MUILink,
-  ListItem,
-  ListItemText,
-  ListItemIcon,
+  // Link as MUILink,
 } from '@material-ui/core'
-import { Link } from 'react-router-dom'
-import {
-  ChevronLeft as ChevronLeftIcon,
-  Menu as MenuIcon,
-  Dashboard as DashboardIcon,
-  People as PeopleIcon,
-} from '@material-ui/icons'
 import Dashboard from './components/Dashboard'
 
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright © '}
-      <MUILink color="inherit" href="https://grandstack.io/">
-        Party Planner
-      </MUILink>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  )
-}
+// function Copyright() {
+//   return (
+//     <Typography variant="body2" color="textSecondary" align="center">
+//       {'Copyright © '}
+//       <MUILink color="inherit" href="https://grandstack.io/">
+//         Party Planner
+//       </MUILink>{' '}
+//       {new Date().getFullYear()}
+//       {'.'}
+//     </Typography>
+//   )
+// }
 
 const drawerWidth = 240
 
@@ -135,35 +121,14 @@ const useStyles = makeStyles((theme) => ({
 
 export default function App() {
   const classes = useStyles()
-  const [open, setOpen] = React.useState(true)
-  const handleDrawerOpen = () => {
-    setOpen(true)
-  }
-  const handleDrawerClose = () => {
-    setOpen(false)
-  }
+  // const [open, setOpen] = React.useState(true)
 
   return (
     <Router>
       <div className={classes.root}>
         <CssBaseline />
-        <AppBar
-          position="absolute"
-          className={clsx(classes.appBar, open && classes.appBarShift)}
-        >
+        <AppBar position="absolute" className={clsx(classes.appBar)}>
           <Toolbar className={classes.toolbar}>
-            <IconButton
-              edge="start"
-              color="inherit"
-              aria-label="open drawer"
-              onClick={handleDrawerOpen}
-              className={clsx(
-                classes.menuButton,
-                open && classes.menuButtonHidden
-              )}
-            >
-              <MenuIcon />
-            </IconButton>
             <img
               className={classes.appBarImage}
               src="img/grandstack.png"
@@ -176,44 +141,10 @@ export default function App() {
               noWrap
               className={classes.title}
             >
-              Welcome To GRANDstack App
+              Welcome To Party Planner
             </Typography>
           </Toolbar>
         </AppBar>
-        <Drawer
-          variant="permanent"
-          classes={{
-            paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),
-          }}
-          open={open}
-        >
-          <div className={classes.toolbarIcon}>
-            <IconButton onClick={handleDrawerClose}>
-              <ChevronLeftIcon />
-            </IconButton>
-          </div>
-          <Divider />
-          <List>
-            <Link to="/" className={classes.navLink}>
-              <ListItem button>
-                <ListItemIcon>
-                  <DashboardIcon />
-                </ListItemIcon>
-                <ListItemText primary="Dashboard" />
-              </ListItem>
-            </Link>
-
-            <Link to="/friends" className={classes.navLink}>
-              <ListItem button>
-                <ListItemIcon>
-                  <PeopleIcon />
-                </ListItemIcon>
-                <ListItemText primary="Friends" />
-              </ListItem>
-            </Link>
-          </List>
-          <Divider />
-        </Drawer>
         <main className={classes.content}>
           <div className={classes.appBarSpacer} />
           <Container maxWidth="lg" className={classes.container}>
@@ -222,10 +153,6 @@ export default function App() {
               <Route exact path="/businesses" component={UserList} />
               <Route exact path="/friends" component={UserList} />
             </Switch>
-
-            <Box pt={4}>
-              <Copyright />
-            </Box>
           </Container>
         </main>
       </div>

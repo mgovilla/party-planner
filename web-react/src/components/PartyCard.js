@@ -9,6 +9,7 @@ const PartyCard = ({ name, location, date, host }, key) => {
     root: {
       margin: theme.spacing(1),
       padding: theme.spacing(0),
+      overflow: 'visible',
     },
     title: {
       fontSize: 14,
@@ -26,14 +27,12 @@ const PartyCard = ({ name, location, date, host }, key) => {
           {name}
         </Typography>
         <Typography className={classes.pos} color="textSecondary">
-          {date}
+          {new Date(date).toLocaleString()}
         </Typography>
         <Typography className={classes.pos} color="textSecondary">
-          {location}
+          Location: {location}
         </Typography>
-        <Typography className={classes.pos} color="textSecondary">
-          Hosted by: {host}
-        </Typography>
+        <Typography color="textSecondary">Hosted by: {host}</Typography>
       </CardContent>
     </Card>
   )

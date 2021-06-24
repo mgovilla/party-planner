@@ -1,13 +1,15 @@
 import React from 'react'
 // import { useTheme } from '@material-ui/core/styles'
+import { Grid } from '@material-ui/core'
 import { useQuery, gql } from '@apollo/client'
 import Title from './Title'
 import HostCard from './HostCard'
 import PartyCard from './PartyCard'
+import PartyDialog from './CreatePartyDialog'
 
-const GET_DATA_QUERY = gql`
-  {
-    users(where: { id: 1 }) {
+export const GET_DATA_QUERY = gql`
+  query getParties($id: ID!) {
+    partylist: users(where: { id: $id }) {
       hosting {
         name
         location
@@ -31,16 +33,29 @@ const GET_DATA_QUERY = gql`
 
 export default function PartiesList() {
   //   const theme = useTheme()
+  const [u, setU] = React.useState('')
+  console.log(u) // this seems to run, but the data is not retrieved again (its cached)
 
   // data will be of the form: data = {users: [{hosting: [partyinfo], parties: [partyinfo]}]}
-  const { loading, error, data } = useQuery(GET_DATA_QUERY)
+  const { loading, error, data } = useQuery(GET_DATA_QUERY, {
+    variables: { id: 1 },
+  })
   if (error) return <p>Error</p>
   if (loading) return <p>Loading</p>
-  console.log(data)
+
   return (
     <React.Fragment>
-      <Title>Your Parties</Title>
-      {data.users[0].hosting.map((p, i) => (
+      <Grid
+        container
+        direction="row"
+        justify="space-between"
+        alignItems="center"
+      >
+        <Title>Your Parties</Title>
+        <PartyDialog update={setU} />
+      </Grid>
+
+      {data.partylist[0].hosting.map((p, i) => (
         <HostCard
           key={i}
           name={p.name}
@@ -49,7 +64,7 @@ export default function PartiesList() {
           invitees={p.invitees}
         />
       ))}
-      {data.users[0].parties.map((p, i) => (
+      {data.partylist[0].parties.map((p, i) => (
         <PartyCard
           key={i}
           name={p.name}

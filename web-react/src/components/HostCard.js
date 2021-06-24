@@ -1,7 +1,8 @@
-import { Card, CardContent, Typography } from '@material-ui/core'
+import { Card, CardContent, Grid, Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import { useTheme } from '@material-ui/core/styles'
 import React from 'react'
+import InviteDialog from './InviteMoreDialog'
 
 const HostCard = ({ name, location, date, invitees }, key) => {
   const theme = useTheme()
@@ -9,22 +10,14 @@ const HostCard = ({ name, location, date, invitees }, key) => {
     root: {
       margin: theme.spacing(1),
       padding: theme.spacing(0),
-      backgroundColor: '#e3dcdc',
+      backgroundColor: '#dae2f0',
+      overflow: 'visible',
     },
     title: {
       fontSize: 14,
     },
     pos: {
       marginBottom: 12,
-    },
-    row: {
-      display: 'flex',
-      '& > *': {
-        margin: theme.spacing(1),
-      },
-    },
-    button: {
-      float: 'right',
     },
   }))
 
@@ -34,20 +27,25 @@ const HostCard = ({ name, location, date, invitees }, key) => {
     <Card className={classes.root} key={key}>
       <CardContent>
         <Typography variant="h5" component="h2">
-          {name}
+          {name} (Hosting)
         </Typography>
         <Typography className={classes.pos} color="textSecondary">
-          {date}
+          {new Date(date).toLocaleString()}
         </Typography>
         <Typography className={classes.pos} color="textSecondary">
-          {location}
+          Location: {location}
         </Typography>
-        <div className={classes.row}>
-          <Typography className={classes.pos} color="textSecondary">
+        <Grid
+          container
+          direction="row"
+          justify="space-between"
+          alignItems="center"
+        >
+          <Typography color="textSecondary">
             Attendees: {invitees.length}
           </Typography>
-          <button className={classes.button}>Invite More!</button>
-        </div>
+          <InviteDialog partyName={name} invitees={invitees} />
+        </Grid>
       </CardContent>
     </Card>
   )
