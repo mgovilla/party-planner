@@ -1,9 +1,25 @@
-import { Card, CardContent, Typography } from '@material-ui/core'
+import {
+  Button,
+  Grid,
+  IconButton,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Card,
+  CardContent,
+  Typography,
+} from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import { useTheme } from '@material-ui/core/styles'
 import React from 'react'
+import { GET_USER_PARTIES } from './PartiesList'
+import { REMOVE_INVITE_MUTATION } from './InviteMoreDialog'
+import { useMutation } from '@apollo/client'
+import CloseIcon from '@material-ui/icons/Close'
 
-const PartyCard = ({ name, location, date, host }, key) => {
+const PartyCard = ({ id, name, location, date, host }, key) => {
   const theme = useTheme()
   const useStyles = makeStyles((theme) => ({
     root: {
@@ -19,13 +35,67 @@ const PartyCard = ({ name, location, date, host }, key) => {
     },
   }))
   const classes = useStyles(theme)
+  const [open, setOpen] = React.useState(false)
+  const [removeInvite] = useMutation(REMOVE_INVITE_MUTATION, {
+    refetchQueries: [{ query: GET_USER_PARTIES, variables: { id: 1 } }],
+  })
+
+  const handleClickOpen = () => {
+    setOpen(true)
+  }
+
+  const handleClose = () => {
+    removeInvite({
+      variables: {
+        names: ['Matt'],
+        party: id,
+      },
+    })
+    setOpen(false)
+  }
 
   return (
     <Card className={classes.root} key={key}>
       <CardContent>
-        <Typography variant="h5" component="h2">
-          {name}
-        </Typography>
+        <Grid
+          container
+          direction="row"
+          justify="space-between"
+          alignItems="center"
+        >
+          <Typography variant="h5" component="h2">
+            {name}
+          </Typography>
+          <div>
+            <IconButton onClick={handleClickOpen}>
+              {' '}
+              <CloseIcon />{' '}
+            </IconButton>
+            <Dialog
+              open={open}
+              onClose={handleClose}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description"
+            >
+              <DialogTitle id="alert-dialog-title">
+                {'Cancel Party'}
+              </DialogTitle>
+              <DialogContent>
+                <DialogContentText id="alert-dialog-description">
+                  Not planning to go to {name}?
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={() => setOpen(false)} color="primary">
+                  Cancel
+                </Button>
+                <Button onClick={handleClose} color="primary" autoFocus>
+                  Confirm
+                </Button>
+              </DialogActions>
+            </Dialog>
+          </div>
+        </Grid>
         <Typography className={classes.pos} color="textSecondary">
           {new Date(date).toLocaleString()}
         </Typography>

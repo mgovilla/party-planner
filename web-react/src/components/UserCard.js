@@ -9,6 +9,7 @@ const UserCard = ({ name, email }, key) => {
     root: {
       margin: theme.spacing(1),
       padding: theme.spacing(0),
+      overflow: 'visible',
     },
     title: {
       fontSize: 14,

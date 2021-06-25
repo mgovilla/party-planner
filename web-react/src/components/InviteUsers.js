@@ -15,6 +15,7 @@ const GET_DATA_QUERY = gql`
 export default function InviteUsers(props) {
   const [open, setOpen] = React.useState(false)
   const { loading, error, data } = useQuery(GET_DATA_QUERY)
+  const [value, setValue] = React.useState(props.invitees)
 
   return (
     <Autocomplete
@@ -22,6 +23,7 @@ export default function InviteUsers(props) {
       id="party-invite"
       open={open}
       fullWidth
+      value={value}
       defaultValue={props.invitees}
       onOpen={() => {
         setOpen(true)
@@ -29,7 +31,10 @@ export default function InviteUsers(props) {
       onClose={() => {
         setOpen(false)
       }}
-      onChange={props.onChange}
+      onChange={(_, v) => {
+        setValue(v)
+        props.onChange(_, v)
+      }}
       getOptionSelected={(option, value) => option.name === value.name}
       getOptionLabel={(option) => option.name}
       options={error ? [] : data.users}

@@ -1,8 +1,8 @@
-id,name,owner,party,cost
-1,paint,1,2,3
-2,costume,1,3,18.29
-3,bucket,2,1,5
-4,doritos,2,3,4
-5,salsa,3,2,8
-6,brushes,4,1,2
-7,salad,4,3,14
+name,owner,party,cost
+paint,1,Blue Party,3
+costume,1,Dino Party,18.29
+bucket,2,Paint Party,5
+doritos,2,Dino Party,4
+salsa,3,Blue Party,8
+brushes,4,Paint Party,2
+salad,4,Dino Party,14

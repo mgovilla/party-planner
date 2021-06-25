@@ -1,5 +1,5 @@
 id,name,email,hosting,parties,bringing
-1,Matt,matt@gmail.com,1,"2,3","1,2"
-2,Jerome,jerome@gmail.com,2,1,3
-3,Donald,donald@gmail.com,3,"1,2","4,5"
-4,Sam,sam@hotmail.com,,"1,3","6,7"
+1,Matt,matt@gmail.com,Paint Party,"Blue Party, Dino Party","paint, costume"
+2,Jerome,jerome@gmail.com,Blue Party,Paint Party,bucket
+3,Donald,donald@gmail.com,Dino Party,"Paint Party, Blue Party","doritos, salsa"
+4,Sam,sam@hotmail.com,,"Paint Party, Dino party","brushes, salad"

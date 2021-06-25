@@ -1,4 +1,4 @@
-id,name,location,date,invitees,host,requires
-1,Paint Party,downtown,12-1-2021,"2,3,4",1,"3,6"
-2,Blue Party,my house,8-2-2021,"1,3",2,"1,5"
-3,Dino Party,lecture hall,9-4-2021,"1,2,4",3,"2,4,7"
+name,location,date,invitees,host,requires
+Paint Party,downtown,12-1-2021,"2,3,4",1,"bucket, brushes"
+Blue Party,my house,8-2-2021,"1,3",2,"paint, salsa"
+Dino Party,lecture hall,9-4-2021,"1,2,4",3,"costume, doritos, salad"

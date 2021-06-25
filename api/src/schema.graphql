@@ -10,7 +10,7 @@ type User {
 }
 
 type Party {
-  id: ID!
+  id: ID! @id
   name: String!
   location: String
   date: DateTime
@@ -20,7 +20,7 @@ type Party {
 }
 
 type Object {
-  id: ID!
+  id: ID! @id
   name: String
   owner: User @relationship(type: "BROUGHT_BY", direction: OUT)
   party: Party @relationship(type: "REQUIRED_BY", direction: OUT)

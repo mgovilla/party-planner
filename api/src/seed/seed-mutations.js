@@ -23,25 +23,24 @@ const generateMutations = (records) => {
   // todo: refactor into a single createParties mutation
   let partyMutations = records.parties.map((rec) => {
     Object.keys(rec).map((k) => {
-      if (k === 'id') rec[k] = parseInt(rec[k])
-      else if (k === 'invitees' || k === 'host' || k === 'requires')
-        delete rec[k]
+      if (k === 'invitees' || k === 'host' || k === 'requires') delete rec[k]
     })
 
     return {
       mutation: gql`
         mutation createParty(
-          $id: ID!
           $name: String!
           $location: String
           $date: DateTime
         ) {
           party: createParties(
-            input: { id: $id, name: $name, location: $location, date: $date }
+            input: { name: $name, location: $location, date: $date }
           ) {
             parties {
               id
               name
+              location
+              date
             }
           }
         }
@@ -54,8 +53,7 @@ const generateMutations = (records) => {
     Object.keys(rec).map((k) => {
       if (k === 'id') rec[k] = parseInt(rec[k])
       // This will convert an empty entry to 0, make sure no id is = 0
-      else if (k === 'parties' || k === 'hosting')
-        rec[k] = rec[k].split(',').map(Number)
+      else if (k === 'parties' || k === 'hosting') rec[k] = rec[k].split(',')
       else if (k === 'bringing') delete rec[k]
     })
 
@@ -65,21 +63,42 @@ const generateMutations = (records) => {
           $id: ID!
           $name: String!
           $email: String
-          $hosting: [ID]
-          $parties: [ID]
+          $hosting: [String]
+          $parties: [String]
         ) {
           user: createUsers(
             input: {
               id: $id
               name: $name
               email: $email
-              parties: { connect: { where: { id_IN: $parties } } }
-              hosting: { connect: { where: { id_IN: $hosting } } }
+              parties: { connect: { where: { name_IN: $parties } } }
+              hosting: { connect: { where: { name_IN: $hosting } } }
             }
           ) {
             users {
               id
               name
+              hosting {
+                id
+                name
+                location
+                date
+                invitees {
+                  id
+                  name
+                }
+              }
+
+              parties {
+                id
+                name
+                location
+                date
+                host {
+                  id
+                  name
+                }
+              }
             }
           }
         }
@@ -90,26 +109,23 @@ const generateMutations = (records) => {
 
   let objectMutations = records.objects.map((rec) => {
     Object.keys(rec).map((k) => {
-      if (k === 'id' || k === 'owner' || k === 'party' || k === 'cost')
-        rec[k] = Number(rec[k])
+      if (k === 'owner' || k === 'cost') rec[k] = Number(rec[k])
     })
 
     return {
       mutation: gql`
         mutation createObject(
-          $id: ID!
           $name: String
           $owner: ID
-          $party: ID
+          $party: String
           $cost: Float
         ) {
           object: createObjects(
             input: {
-              id: $id
               name: $name
               cost: $cost
               owner: { connect: { where: { id: $owner } } }
-              party: { connect: { where: { id: $party } } }
+              party: { connect: { where: { name: $party } } }
             }
           ) {
             objects {

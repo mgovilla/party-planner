@@ -13,8 +13,9 @@ import UserCard from './UserCard'
 //   });
 
 const GET_COUNT_QUERY = gql`
-  {
+  query getUsers {
     users {
+      id
       name
       email
     }

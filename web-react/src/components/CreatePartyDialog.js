@@ -19,10 +19,10 @@ import AddIcon from '@material-ui/icons/Add'
 import DateFnsUtils from '@date-io/date-fns'
 import InviteUsers from './InviteUsers'
 import { useMutation, gql } from '@apollo/client'
+import { GET_USER_PARTIES } from './PartiesList'
 
 const CREATE_PARTY_MUTATION = gql`
   mutation createParty(
-    $id: ID!
     $name: String!
     $location: String
     $date: DateTime
@@ -31,7 +31,6 @@ const CREATE_PARTY_MUTATION = gql`
   ) {
     party: createParties(
       input: {
-        id: $id
         name: $name
         location: $location
         date: $date
@@ -40,6 +39,7 @@ const CREATE_PARTY_MUTATION = gql`
       }
     ) {
       parties {
+        id
         name
         location
         date
@@ -51,15 +51,12 @@ const CREATE_PARTY_MUTATION = gql`
   }
 `
 
-export default function PartyDialog(props) {
+export default function PartyDialog() {
   const [open, setOpen] = React.useState(false)
   const [selectedDate, setSelectedDate] = React.useState(new Date())
   const [invitees, setInvitees] = React.useState([])
   const [createParty] = useMutation(CREATE_PARTY_MUTATION, {
-    update(_, { data: { party } }) {
-      console.log(party)
-      props.update(party.parties[0].name)
-    },
+    refetchQueries: [{ query: GET_USER_PARTIES, variables: { id: 1 } }],
   })
 
   const handleClickOpen = () => {
@@ -72,10 +69,8 @@ export default function PartyDialog(props) {
 
   const handleSubmit = () => {
     // Read the data and do a mutation
-    console.log(invitees)
     createParty({
       variables: {
-        id: 1,
         name: document.getElementById('party-name').value,
         location: document.getElementById('party-location').value,
         date: selectedDate,

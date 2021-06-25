@@ -4,7 +4,7 @@ It is possible to automate the below steps. However, Below are manual steps list
 
 ## Auth0 for Grand Stack in 
 1. Navigate to `https://manage.auth0.com/dashboard/`. If you do not have an auth0 account, create one under the free plan.
-2. Create a new application on Auth0 (Singple Page Applications - SPA). If you have already created an application on Auth0 for GRANDstack, Skip this step.
+2. Create a new application on Auth0 (Single Page Applications - SPA). If you have already created an application on Auth0 for GRANDstack, Skip this step.
 3. For `AUTH_DIRECTIVES_ROLE_KEY`, Under the application settings, Copy value of `Domain` under `basic information`.  the domain information `https://<DOMAIN>/roles`
 4. Visit settings under this application, Scroll to the bottom and select `Show Advanced Settings`.
 5. `Advanced Settings` has various tabs. Under the tab named `Certificates`, copy the text in the box for `Signing Certificate`. This is our `JWT_SECRET`.
