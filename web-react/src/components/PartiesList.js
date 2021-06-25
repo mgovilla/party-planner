@@ -62,7 +62,7 @@ export default function PartiesList() {
         <PartyDialog />
       </Grid>
 
-      {data.partyList ? (
+      {data.partyList || data.partyList[0] ? (
         data.partyList[0].hosting.map((p, i) => (
           <HostCard
             key={i}
