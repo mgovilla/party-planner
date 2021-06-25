@@ -25,7 +25,7 @@ const GET_COUNT_QUERY = gql`
 export default function UsersList() {
   // const classes = useStyles();
   const { loading, error, data } = useQuery(GET_COUNT_QUERY)
-  console.log(data)
+
   if (error) return <p>Error</p>
   return (
     <React.Fragment>

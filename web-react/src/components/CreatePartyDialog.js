@@ -20,6 +20,7 @@ import DateFnsUtils from '@date-io/date-fns'
 import InviteUsers from './InviteUsers'
 import { useMutation, gql } from '@apollo/client'
 import { GET_USER_PARTIES } from './PartiesList'
+import { useAuth0 } from '@auth0/auth0-react'
 
 const CREATE_PARTY_MUTATION = gql`
   mutation createParty(
@@ -52,11 +53,12 @@ const CREATE_PARTY_MUTATION = gql`
 `
 
 export default function PartyDialog() {
+  const { user } = useAuth0()
   const [open, setOpen] = React.useState(false)
   const [selectedDate, setSelectedDate] = React.useState(new Date())
   const [invitees, setInvitees] = React.useState([])
   const [createParty] = useMutation(CREATE_PARTY_MUTATION, {
-    refetchQueries: [{ query: GET_USER_PARTIES, variables: { id: 1 } }],
+    refetchQueries: [{ query: GET_USER_PARTIES, variables: { id: user.sub } }],
   })
 
   const handleClickOpen = () => {
@@ -74,7 +76,7 @@ export default function PartyDialog() {
         name: document.getElementById('party-name').value,
         location: document.getElementById('party-location').value,
         date: selectedDate,
-        host: 1,
+        host: user.sub,
         invitees: invitees.map((u) => u.name),
       },
     })
@@ -148,7 +150,7 @@ export default function PartyDialog() {
             </Grid>
           </MuiPickersUtilsProvider>
 
-          <InviteUsers onChange={(_, v) => setInvitees(v)} />
+          <InviteUsers invitees={[]} onChange={(_, v) => setInvitees(v)} />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCancel} color="primary">

@@ -18,8 +18,10 @@ import { GET_USER_PARTIES } from './PartiesList'
 import { REMOVE_INVITE_MUTATION } from './InviteMoreDialog'
 import { useMutation } from '@apollo/client'
 import CloseIcon from '@material-ui/icons/Close'
+import { useAuth0 } from '@auth0/auth0-react'
 
 const PartyCard = ({ id, name, location, date, host }, key) => {
+  const { user } = useAuth0()
   const theme = useTheme()
   const useStyles = makeStyles((theme) => ({
     root: {
@@ -37,7 +39,7 @@ const PartyCard = ({ id, name, location, date, host }, key) => {
   const classes = useStyles(theme)
   const [open, setOpen] = React.useState(false)
   const [removeInvite] = useMutation(REMOVE_INVITE_MUTATION, {
-    refetchQueries: [{ query: GET_USER_PARTIES, variables: { id: 1 } }],
+    refetchQueries: [{ query: GET_USER_PARTIES, variables: { id: user.sub } }],
   })
 
   const handleClickOpen = () => {

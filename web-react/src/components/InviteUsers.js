@@ -3,18 +3,25 @@ import TextField from '@material-ui/core/TextField'
 import Autocomplete from '@material-ui/lab/Autocomplete'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import { useQuery, gql } from '@apollo/client'
+import { useAuth0 } from '@auth0/auth0-react'
 
 const GET_DATA_QUERY = gql`
-  {
-    users {
+  query getUsersButSelf($id: ID!) {
+    users(where: { id_NOT: $id }) {
+      id
       name
+      email
     }
   }
 `
 
 export default function InviteUsers(props) {
+  const { user } = useAuth0()
+
   const [open, setOpen] = React.useState(false)
-  const { loading, error, data } = useQuery(GET_DATA_QUERY)
+  const { loading, error, data } = useQuery(GET_DATA_QUERY, {
+    variables: { id: user.sub },
+  })
   const [value, setValue] = React.useState(props.invitees)
 
   return (

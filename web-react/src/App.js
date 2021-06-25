@@ -1,37 +1,32 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
 import { Switch, Route, BrowserRouter as Router } from 'react-router-dom'
-
-import UserList from './components/UserList'
 
 import clsx from 'clsx'
 import { makeStyles } from '@material-ui/core/styles'
 import {
   CssBaseline,
-  // Box,
+  Button,
   AppBar,
   Toolbar,
   Typography,
   Container,
-  // Link as MUILink,
 } from '@material-ui/core'
 import Dashboard from './components/Dashboard'
+import { useAuth0 } from '@auth0/auth0-react'
+import { useMutation, gql } from '@apollo/client'
 
-// function Copyright() {
-//   return (
-//     <Typography variant="body2" color="textSecondary" align="center">
-//       {'Copyright © '}
-//       <MUILink color="inherit" href="https://grandstack.io/">
-//         Party Planner
-//       </MUILink>{' '}
-//       {new Date().getFullYear()}
-//       {'.'}
-//     </Typography>
-//   )
-// }
+const ADD_USER_MUTATION = gql`
+  mutation addUser($id: ID!, $name: String!, $email: String!) {
+    mergeUser(name: $name, id: $id, email: $email) {
+      id
+      name
+      email
+    }
+  }
+`
 
 const drawerWidth = 240
-
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
@@ -120,42 +115,74 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export default function App() {
-  const classes = useStyles()
-  // const [open, setOpen] = React.useState(true)
+  const {
+    isLoading,
+    isAuthenticated,
+    error,
+    user,
+    loginWithRedirect,
+    logout,
+  } = useAuth0()
 
-  return (
-    <Router>
-      <div className={classes.root}>
-        <CssBaseline />
-        <AppBar position="absolute" className={clsx(classes.appBar)}>
-          <Toolbar className={classes.toolbar}>
-            <img
-              className={classes.appBarImage}
-              src="img/grandstack.png"
-              alt="GRANDstack logo"
-            />
-            <Typography
-              component="h1"
-              variant="h6"
-              color="inherit"
-              noWrap
-              className={classes.title}
-            >
-              Welcome To Party Planner
-            </Typography>
-          </Toolbar>
-        </AppBar>
-        <main className={classes.content}>
-          <div className={classes.appBarSpacer} />
-          <Container maxWidth="lg" className={classes.container}>
-            <Switch>
-              <Route exact path="/" component={Dashboard} />
-              <Route exact path="/businesses" component={UserList} />
-              <Route exact path="/friends" component={UserList} />
-            </Switch>
-          </Container>
-        </main>
-      </div>
-    </Router>
-  )
+  const classes = useStyles()
+  const [addUser] = useMutation(ADD_USER_MUTATION)
+
+  useEffect(() => {
+    if (isAuthenticated)
+      addUser({
+        variables: { id: user.sub, name: user.name, email: user.email },
+      })
+  }, [isAuthenticated])
+
+  if (isLoading) {
+    return <div>Loading...</div>
+  }
+  if (error) {
+    return <div>Oops... {error.message}</div>
+  }
+
+  if (isAuthenticated) {
+    return (
+      <Router>
+        <div className={classes.root}>
+          <CssBaseline />
+          <AppBar position="absolute" className={clsx(classes.appBar)}>
+            <Toolbar className={classes.toolbar}>
+              <img
+                className={classes.appBarImage}
+                src="img/grandstack.png"
+                alt="GRANDstack logo"
+              />
+              <Typography
+                component="h1"
+                variant="h6"
+                color="inherit"
+                noWrap
+                className={classes.title}
+              >
+                Welcome To Party Planner
+              </Typography>
+              <Button
+                variant="outlined"
+                color="secondary"
+                onClick={() => logout({ returnTo: window.location.origin })}
+              >
+                Log out
+              </Button>
+            </Toolbar>
+          </AppBar>
+          <main className={classes.content}>
+            <div className={classes.appBarSpacer} />
+            <Container maxWidth="lg" className={classes.container}>
+              <Switch>
+                <Route exact path="/" component={Dashboard} />
+              </Switch>
+            </Container>
+          </main>
+        </div>
+      </Router>
+    )
+  } else {
+    return loginWithRedirect()
+  }
 }

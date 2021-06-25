@@ -18,6 +18,7 @@ import { useTheme } from '@material-ui/core/styles'
 import React from 'react'
 import InviteDialog from './InviteMoreDialog'
 import { GET_USER_PARTIES } from './PartiesList'
+import { useAuth0 } from '@auth0/auth0-react'
 
 const DELETE_PARTY = gql`
   mutation DeleteParty($name: String!) {
@@ -29,6 +30,7 @@ const DELETE_PARTY = gql`
 `
 
 const HostCard = ({ id, name, location, date, invitees }, key) => {
+  const { user } = useAuth0()
   const theme = useTheme()
   const useStyles = makeStyles((theme) => ({
     root: {
@@ -48,7 +50,7 @@ const HostCard = ({ id, name, location, date, invitees }, key) => {
   const classes = useStyles(theme)
   const [open, setOpen] = React.useState(false)
   const [deleteParty] = useMutation(DELETE_PARTY, {
-    refetchQueries: [{ query: GET_USER_PARTIES, variables: { id: 1 } }],
+    refetchQueries: [{ query: GET_USER_PARTIES, variables: { id: user.sub } }],
   })
 
   const handleClickOpen = () => {
@@ -83,7 +85,7 @@ const HostCard = ({ id, name, location, date, invitees }, key) => {
             </IconButton>
             <Dialog
               open={open}
-              onClose={handleClose}
+              onClose={() => setOpen(false)}
               aria-labelledby="alert-dialog-title"
               aria-describedby="alert-dialog-description"
             >

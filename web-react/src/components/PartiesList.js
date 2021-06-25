@@ -6,6 +6,7 @@ import Title from './Title'
 import HostCard from './HostCard'
 import PartyCard from './PartyCard'
 import PartyDialog from './CreatePartyDialog'
+import { useAuth0 } from '@auth0/auth0-react'
 
 export const GET_USER_PARTIES = gql`
   query getParties($id: ID!) {
@@ -38,15 +39,16 @@ export const GET_USER_PARTIES = gql`
 `
 
 export default function PartiesList() {
+  const { user } = useAuth0()
   //   const theme = useTheme()
 
   // data will be of the form: data = {users: [{hosting: [partyinfo], parties: [partyinfo]}]}
   const { loading, error, data } = useQuery(GET_USER_PARTIES, {
-    variables: { id: 1 },
+    variables: { id: user.sub },
   })
+
   if (error) return <p>Error</p>
   if (loading) return <p>Loading</p>
-  console.log('Party list', data.partyList)
 
   return (
     <React.Fragment>
