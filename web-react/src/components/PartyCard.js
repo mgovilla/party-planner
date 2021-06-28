@@ -49,7 +49,7 @@ const PartyCard = ({ id, name, location, date, host }, key) => {
   const handleClose = () => {
     removeInvite({
       variables: {
-        names: ['Matt'],
+        names: [user.name],
         party: id,
       },
     })

@@ -147,7 +147,8 @@ export default function InviteDialog(props) {
         open={open}
         onClose={handleCancel}
         aria-labelledby="form-dialog-title"
-        fullWidth={'md'}
+        fullWidth
+        maxWidth={'md'}
       >
         <DialogTitle id="form-dialog-title">Invite Friends</DialogTitle>
         <DialogContent>

@@ -22,6 +22,7 @@ export default function InviteUsers(props) {
   const { loading, error, data } = useQuery(GET_DATA_QUERY, {
     variables: { id: user.sub },
   })
+
   const [value, setValue] = React.useState(props.invitees)
 
   return (
@@ -44,7 +45,7 @@ export default function InviteUsers(props) {
       }}
       getOptionSelected={(option, value) => option.name === value.name}
       getOptionLabel={(option) => option.name}
-      options={error ? [] : data.users}
+      options={error || !data ? [] : data.users}
       loading={loading}
       limitTags={5}
       renderInput={(params) => (

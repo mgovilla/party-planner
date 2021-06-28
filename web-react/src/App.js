@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 
-import { Switch, Route, BrowserRouter as Router } from 'react-router-dom'
+import { Switch, Route, BrowserRouter as Router, Link } from 'react-router-dom'
 
 import clsx from 'clsx'
 import { makeStyles } from '@material-ui/core/styles'
@@ -15,6 +15,7 @@ import {
 import Dashboard from './components/Dashboard'
 import { useAuth0 } from '@auth0/auth0-react'
 import { useMutation, gql } from '@apollo/client'
+import UsersList from './components/RegisteredUsers'
 
 const ADD_USER_MUTATION = gql`
   mutation addUser($id: ID!, $name: String!, $email: String!) {
@@ -148,11 +149,13 @@ export default function App() {
           <CssBaseline />
           <AppBar position="absolute" className={clsx(classes.appBar)}>
             <Toolbar className={classes.toolbar}>
-              <img
-                className={classes.appBarImage}
-                src="img/grandstack.png"
-                alt="GRANDstack logo"
-              />
+              <Link to={{ pathname: '/' }}>
+                <img
+                  className={classes.appBarImage}
+                  src="img/grandstack.png"
+                  alt="GRANDstack logo"
+                />
+              </Link>
               <Typography
                 component="h1"
                 variant="h6"
@@ -176,6 +179,7 @@ export default function App() {
             <Container maxWidth="lg" className={classes.container}>
               <Switch>
                 <Route exact path="/" component={Dashboard} />
+                <Route exact path="/users" component={UsersList} />
               </Switch>
             </Container>
           </main>

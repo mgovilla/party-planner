@@ -1,16 +1,8 @@
 import React from 'react'
 import Title from './Title'
 import { useQuery, gql } from '@apollo/client'
-// import { Card, CardContent, Typography } from '@material-ui/core'
+import { Link } from 'react-router-dom'
 import UserCard from './UserCard'
-
-// import { makeStyles } from '@material-ui/core/styles';
-
-// const useStyles = makeStyles({
-//     root: {
-//       minWidth: 275
-//     },
-//   });
 
 const GET_COUNT_QUERY = gql`
   query getUsers {
@@ -29,7 +21,9 @@ export default function UsersList() {
   if (error) return <p>Error</p>
   return (
     <React.Fragment>
-      <Title>Total Users</Title>
+      <Link to={{ pathname: '/users' }}>
+        <Title>Total Users</Title>
+      </Link>
       {loading
         ? 'Loading'
         : data.users.map((u, i) => (
