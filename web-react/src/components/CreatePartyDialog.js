@@ -99,7 +99,7 @@ export default function PartyDialog() {
         onClose={handleCancel}
         aria-labelledby="form-dialog-title"
         fullWidth
-        maxWidth={'md'}
+        maxWidth={'sm'}
       >
         <DialogTitle id="form-dialog-title">Host Party</DialogTitle>
         <DialogContent>
